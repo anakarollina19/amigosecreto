@@ -6,6 +6,21 @@
     --color-button-hover: #e55720;
     --color-text: #444444;
     --color-white: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-border: #000000;
+    --color-success: #0a8f0a;
+    --color-error: #d62828;
+}
+
+:root[data-theme="dark"] {
+    --color-primary: #1e2a6b;
+    --color-secondary: #1b1d29;
+    --color-tertiary: #3a3d4f;
+    --color-text: #e8e8f0;
+    --color-surface: #262938;
+    --color-border: #5a5e78;
+    --color-success: #4ade80;
+    --color-error: #ff6b6b;
 }
 
 /* Estilos gerais */
@@ -16,45 +31,73 @@
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
     background-color: var(--color-primary);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: "Inter", sans-serif;
+    color: var(--color-text);
+    transition: background-color 0.3s;
+    overflow-x: hidden;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+    min-height: 100vh;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    padding: 8px 12px;
+    background: var(--color-surface);
+    z-index: 10;
 }
 
 /* Banner */
 .header-banner {
-    flex: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px 0 0;
+    gap: 24px;
+    padding: 48px 16px 32px;
+    flex-wrap: wrap;
+}
+
+.header-emoji {
+    font-size: 96px;
+    animation: balancar 2.5s ease-in-out infinite;
+}
+
+@keyframes balancar {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
 }
 
 /* Seção de entrada */
 .input-section {
-    flex: 60%;
+    flex: 1;
     background-color: var(--color-secondary);
-    border: 1px solid #000;
+    border: 1px solid var(--color-border);
     border-radius: 64px 64px 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    width: 100%;
+    padding: 32px 16px;
+    transition: background-color 0.3s;
 }
 
 /* Títulos */
 .main-title {
-    font-size: 48px;
+    font-size: clamp(36px, 8vw, 56px);
     font-family: "Merriweather", serif;
     font-weight: 900;
     font-style: italic;
@@ -62,57 +105,70 @@ body {
 }
 
 .section-title {
-    font-family: "Inter", serif;
-    font-size: 36px;
+    font-size: clamp(22px, 5vw, 36px);
     font-weight: 700;
     color: var(--color-primary);
     margin: 10px 0;
     text-align: center;
 }
 
-/* Contêineres de entrada e botão */
+:root[data-theme="dark"] .section-title {
+    color: #9fb0ff;
+}
+
+/* Entrada */
 .input-wrapper {
     display: flex;
-    justify-content: center;
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
 }
 
 .input-name {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #000;
-    border-radius: 25px 0 0 25px;
-    font-size: 16px;
-}
-
-.button-container {
-    width: 300px;
-    justify-content: center;
-}
-
-/* Estilos de entrada de texto */
-.input-title {
     flex: 1;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 2px solid #333;
+    min-width: 0;
+    padding: 12px 18px;
+    border: 2px solid var(--color-border);
     border-right: none;
     border-radius: 25px 0 0 25px;
-    font-family: "Merriweather", serif;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    background: var(--color-surface);
+    color: var(--color-text);
 }
 
-/* Estilos de botão */
+.input-name:focus {
+    outline: 3px solid var(--color-button);
+    outline-offset: 2px;
+}
+
+.message {
+    min-height: 24px;
+    margin-top: 10px;
+    font-weight: 700;
+}
+
+.message--erro { color: var(--color-error); }
+.message--sucesso { color: var(--color-success); }
+
+/* Botões */
 button {
     padding: 15px 30px;
     font-family: "Inter", sans-serif;
     font-size: 16px;
-    border: 2px solid #000;
+    border: 2px solid var(--color-border);
     border-radius: 25px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     cursor: pointer;
+    transition: transform 0.15s, background-color 0.2s;
+}
+
+button:active:not(:disabled) {
+    transform: translateY(2px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .button-add {
@@ -125,38 +181,198 @@ button {
     background-color: #a1a1a1;
 }
 
+.button-link {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 4px 8px;
+    color: var(--color-error);
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.button-secondary {
+    padding: 10px 20px;
+    font-size: 14px;
+    background: var(--color-surface);
+    color: var(--color-text);
+}
+
 /* Listas */
+.list-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.counter {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
 ul {
     list-style-type: none;
+}
+
+.name-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 600px;
+    margin: 16px 0;
+}
+
+.name-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 6px 6px 14px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: 999px;
+    font-size: 16px;
+    animation: entrar 0.25s ease-out;
+}
+
+.chip-remove {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 50%;
+    background: var(--color-tertiary);
     color: var(--color-text);
-    font-family: "Inter", sans-serif;
-    font-size: 18px;
-    margin: 20px 0;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.chip-remove:hover {
+    background: var(--color-error);
+    color: #fff;
+}
+
+@keyframes entrar {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .result-list {
-    margin-top: 15px;
-    color: #05DF05;
-    font-size: 22px;
-    font-weight: bold;
+    width: 100%;
+    max-width: 600px;
+    margin: 8px 0 16px;
+    font-size: 20px;
     text-align: center;
 }
 
-/* Botão de sortear título */
-.button-draw {
+.result-highlight {
+    color: var(--color-success);
+    font-weight: 700;
+    font-size: 24px;
+    animation: entrar 0.4s ease-out;
+}
+
+.result-rolling {
+    font-size: 24px;
+    opacity: 0.7;
+}
+
+.pair {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: 16px;
+    font-size: 17px;
+    animation: entrar 0.3s ease-out;
+}
+
+.pair span {
+    flex: 1;
+    text-align: left;
+    font-weight: 700;
+}
+
+.button-reveal {
+    padding: 6px 14px;
+    font-size: 14px;
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.button-share {
+    padding: 6px 12px;
+    border-radius: 25px;
+    background: #25D366;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.result-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.result-actions[hidden] { display: none; }
+
+/* Botões de sorteio */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     width: 100%;
-    padding: 10px 40px;
+    max-width: 320px;
+}
+
+.button-draw {
+    width: 100%;
+    padding: 14px 24px;
     color: var(--color-white);
     background-color: var(--color-button);
-    font-size: 16px;
+    font-weight: 700;
 }
 
-.button-draw img {
-    margin-right: 40px;
-}
-
-.button-draw:hover {
+.button-draw:hover:not(:disabled) {
     background-color: var(--color-button-hover);
+}
+
+.button-draw--alt {
+    background-color: var(--color-primary);
+}
+
+.button-draw--alt:hover:not(:disabled) {
+    background-color: #3550d6;
+}
+
+/* Confete */
+.confetti {
+    position: fixed;
+    top: -12px;
+    width: 10px;
+    height: 14px;
+    border-radius: 2px;
+    pointer-events: none;
+    animation: cair linear forwards;
+    z-index: 20;
+}
+
+@keyframes cair {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0.8; }
+}
+
+@media (max-width: 480px) {
+    .input-section { border-radius: 32px 32px 0 0; }
+    .header-emoji { font-size: 64px; }
 }
